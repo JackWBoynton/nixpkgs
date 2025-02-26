@@ -9224,6 +9224,10 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
+  hello-imgui = callPackage ../development/libraries/hello-imgui {
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+
   imlib2Full = imlib2.override {
     # Compilation error on Darwin with librsvg. For more information see:
     # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
