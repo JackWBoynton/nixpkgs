@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     repo = "hello_imgui";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256:0avdgskbr8dg0h61j8pb3wllbplyzfw42xk57lavgwr3zl25wk4d";
+    hash = "sha256-TM8HV5sgalG+TvsghfH9qzJ+OGvuJn4V4EePoTxflwE=";
   };
 
   nativeBuildInputs = [ cmake ];
