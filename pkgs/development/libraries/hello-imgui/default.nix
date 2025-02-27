@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jackwboynton";
     repo = "hello_imgui";
-    rev = "4042bb35174cdc7109161bac7a53b05fd934154c";
+    rev = "e85acc60c8308f467465eca83084c106f3111185";
     fetchSubmodules = true;
-    hash = "sha256-AMxYH7/7yW5HK+bc8pK0cxss4EnbfSLwrU3yK04d2ug=";
+    hash = "sha256-DWT4Fm4CzyaiWEggCG9v4MQjSl0ZTVtfXkvfJ1+8hrg=";
   };
 
   nativeBuildInputs = [ cmake ];
