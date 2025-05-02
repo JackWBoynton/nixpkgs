@@ -1563,7 +1563,8 @@ in
       };
 
       options.bitrate = lib.mkOption {
-        type        = lib.types.int;
+        type        = lib.types.nullOr lib.types.int;
+        default     = null;
         description = "Nominal bitrate in bits/sec.";
       };
       options.fd = lib.mkOption {
@@ -1582,15 +1583,18 @@ in
         description = "Enable triple‐sampling.";
       };
       options.restartMs = lib.mkOption {
-        type        = lib.types.int;
+        type        = lib.types.nullOr lib.types.int;
+        default     = null;
         description = "Restart delay in ms.";
       };
       options.samplePoint = lib.mkOption {
-        type        = lib.types.float;
+        type        = lib.types.nullOr lib.types.float;
+        default     = null;
         description = "Sample-point fraction for nominal phase.";
       };
       options.dataSamplePoint = lib.mkOption {
-        type        = lib.types.float;
+        type        = lib.types.nullOr lib.types.float;
+        default     = null;
         description = "Sample-point fraction for data phase.";
       };
     });
