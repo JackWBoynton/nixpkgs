@@ -414,6 +414,44 @@ let
             '';
           };
         };
+
+        can = mkOption {
+          type = types.nullOr (types.submodule {
+            options.bitrate = mkOption {
+              type        = types.int;
+              description = "Nominal CAN bitrate (bits/sec).";
+            };
+            options.fd = mkOption {
+              type        = types.bool;
+              default     = false;
+              description = "Enable CAN FD.";
+            };
+            options.dataBitrate = mkOption {
+              type        = types.nullOr types.int;
+              default     = null;
+              description = "CAN FD data‐phase bitrate.";
+            };
+            options.tripleSampling = mkOption {
+              type        = types.bool;
+              default     = false;
+              description = "Enable triple‐sampling.";
+            };
+            options.restartMs = mkOption {
+              type        = types.int;
+              description = "Automatic restart delay (ms).";
+            };
+            options.samplePoint = mkOption {
+              type        = types.float;
+              description = "Sample point (fraction) for nominal phase.";
+            };
+            options.dataSamplePoint = mkOption {
+              type        = types.float;
+              description = "Sample point (fraction) for data phase.";
+            };
+          });
+          default     = null;
+          description = "CAN bus interface timing settings.";
+        };
       };
 
       config = {
