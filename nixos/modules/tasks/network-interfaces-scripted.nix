@@ -745,14 +745,15 @@ let
                 ${if v.virtual then ''
                   ip link add dev "${n}" type vcan
                 '' else ''
-                  ip link set "${n}" type can bitrate "${v.bitrate}" \
-                  ${optionalString v.fd ''
-                    fd on dbitrate ${v.dataBitrate} \
-                  ''}
-                  triple-sampling ${ if v.tripleSampling then "on" else "off" } \
-                  ${optionalString (v.restartMs != null) "restart-ms \"${v.restartMs}\""} \
-                  ${optionalString (v.samplePoint != null) "sample-point \"${v.samplePoint}\""} \
-                  ${optionalString (v.dataSamplePoint != null) "dsample-point \"${v.dataSamplePoint}\""} \
+                  ip link set "${n}" type can \
+                    bitrate ${toString v.bitrate} \
+                    ${optionalString v.fd ''
+                      fd on dbitrate ${toString v.dataBitrate} \
+                    ''}\
+                    triple-sampling ${ if v.tripleSampling then "on" else "off" } \
+                    ${optionalString (v.restartMs != null) "restart-ms ${toString v.restartMs}"} \
+                    ${optionalString (v.samplePoint != null) "sample-point ${toString v.samplePoint}"} \
+                    ${optionalString (v.dataSamplePoint != null) "dsample-point ${toString v.dataSamplePoint}"} \
                 '' }
 
                 ip link set dev "${n}" up
