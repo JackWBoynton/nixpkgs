@@ -727,17 +727,13 @@ let
         createCanInterface =
           n: v:
           nameValuePair "${n}-netdev" (
-            let
-              deps = deviceDependency v.dev;
-            in
             {
               description = "CAN Bus Interface ${n}";
               wantedBy = [
                 "network-setup.service"
                 (subsystemDevice n)
               ];
-              bindsTo = deps;
-              after = [ "network-pre.target" ] ++ deps;
+              after = [ "network-pre.target" ];
               before = [ "network-setup.service" ];
               serviceConfig.Type = "oneshot";
               serviceConfig.RemainAfterExit = true;
