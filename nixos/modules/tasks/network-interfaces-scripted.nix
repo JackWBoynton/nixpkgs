@@ -102,6 +102,7 @@ let
             || (hasAttr dev cfg.vlans)
             || (hasAttr dev cfg.greTunnels)
             || (hasAttr dev cfg.vswitches)
+            || (hasAttr dev cfg.canInterfaces)
           then
             [ "${dev}-netdev.service" ]
           else
@@ -722,6 +723,52 @@ let
             }
           );
 
+
+        createCanInterface =
+          n: v:
+          nameValuePair "${n}-netdev" (
+            let
+              deps = deviceDependency v.dev;
+            in
+            {
+              description = "CAN Bus Interface ${n}";
+              wantedBy = [
+                "network-setup.service"
+                (subsystemDevice n)
+              ];
+              bindsTo = deps;
+              after = [ "network-pre.target" ] ++ deps;
+              before = [ "network-setup.service" ];
+              serviceConfig.Type = "oneshot";
+              serviceConfig.RemainAfterExit = true;
+              path = [ pkgs.iproute2 ];
+              script = ''
+                # Remove Dead Interfaces
+                ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
+
+                ${optionalString v.virtual ''
+                  ip link add dev "${n}" type vcan
+                ''}
+
+                ${optionalString !v.virtual ''
+                  ip link set "${n}" type can bitrate ${v.bitrate} \
+                  ${optionalString v.fd ''
+                    fd on dbitrate ${v.dataBitrate} \
+                  ''}
+                  triple-sampling ${ if v.tripleSampling then "on" else "off" } \
+                  ${optionalString (v.restartMs != null) "restart-ms \"${v.restartMs}\""} \
+                  ${optionalString (v.samplePoint != null) "sample-point \"${v.samplePoint}\""} \
+                  ${optionalString (v.dataSamplePoint != null) "dsample-point \"${v.dataSamplePoint}\""} \
+                ''}
+
+                ip link set dev "${n}" up
+              '';
+              postStop = ''
+                ip link delete dev "${n}" || true
+              '';
+            }
+          );
+
       in
       listToAttrs (
         map configureAddrs interfaces ++ map createTunDevice (filter (i: i.virtual) interfaces)
@@ -734,6 +781,7 @@ let
       // mapAttrs' createSitDevice cfg.sits
       // mapAttrs' createGreDevice cfg.greTunnels
       // mapAttrs' createVlanDevice cfg.vlans
+      // mapAttrs' createCanInterface cfg.canInterfaces
       // {
         network-setup = networkSetup;
         network-local-commands = networkLocalCommands;

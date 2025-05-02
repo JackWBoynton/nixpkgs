@@ -1552,6 +1552,12 @@ in
       a submodule of timing parameters.
     '';
     type = lib.types.attrsOf (lib.types.submodule {
+      options.virtual = lib.mkOption {
+        type          = lib.types.bool;
+        default       = false;
+        description = "Is this a virtual bus?";
+      };
+
       options.bitrate = lib.mkOption {
         type        = lib.types.int;
         description = "Nominal bitrate in bits/sec.";
