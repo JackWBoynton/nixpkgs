@@ -472,6 +472,31 @@ in
             }
           )
         ))
+        (mkMerge (
+          flip mapAttrsToList (filterAttrs (_: iface: iface.type == "can") cfg.interfaces) (
+            name: iface: {
+              netdevs."40-${name}" = {
+                netdevConfig = {
+                  Kind = "can";
+                  Name = name;
+                };
+              };
+              networks."40-${name}" = {
+                matchConfig.Name = name;
+                extraConfig = lib.concatStringsSep "\n"
+                  ([ "[CAN]"
+                  , "BitRate=${toString iface.can.bitrate}"
+                  , (if iface.can.fd           then "FD=on"           else "")
+                  , (if iface.can.dataBitrate  then "DataBitRate=${toString iface.can.dataBitrate}" else "")
+                  , "TripleSampling=${if iface.can.tripleSampling then "on" else "off"}"
+                  , "RestartMs=${toString iface.can.restartMs}"
+                  , "SamplePoint=${toString iface.can.samplePoint}"
+                  , "DataSamplePoint=${toString iface.can.dataSamplePoint}"
+                  ]);
+              };
+            }
+          )
+        ))
         vlanNetworks
       ];
 
