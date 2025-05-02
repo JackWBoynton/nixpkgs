@@ -1531,6 +1531,60 @@ in
 
     };
 
+  networking.canInterfaces = lib.mkOption {
+    default     = { };
+    example     = literalExpression ''
+      {
+        can0 = {
+          bitrate         = 500000;
+          fd              = true;
+          dataBitrate     = 4000000;
+          tripleSampling  = false;
+          restartMs       = 10;
+          samplePoint     = 0.75;
+          dataSamplePoint = 0.80;
+        };
+        can1 = { bitrate = 250000; };
+      }
+    '';
+    description = ''
+      A set of CAN interfaces to bring up via systemd-networkd. Each entry is
+      a submodule of timing parameters.
+    '';
+    type = lib.types.attrsOf (lib.types.submodule {
+      options.bitrate = lib.mkOption {
+        type        = lib.types.int;
+        description = "Nominal bitrate in bits/sec.";
+      };
+      options.fd = lib.mkOption {
+        type        = lib.types.bool;
+        default     = false;
+        description = "Enable CAN FD.";
+      };
+      options.dataBitrate = lib.mkOption {
+        type        = lib.types.nullOr lib.types.int;
+        default     = null;
+        description = "Data‐phase bitrate for FD.";
+      };
+      options.tripleSampling = lib.mkOption {
+        type        = lib.types.bool;
+        default     = false;
+        description = "Enable triple‐sampling.";
+      };
+      options.restartMs = lib.mkOption {
+        type        = lib.types.int;
+        description = "Restart delay in ms.";
+      };
+      options.samplePoint = lib.mkOption {
+        type        = lib.types.float;
+        description = "Sample-point fraction for nominal phase.";
+      };
+      options.dataSamplePoint = lib.mkOption {
+        type        = lib.types.float;
+        description = "Sample-point fraction for data phase.";
+      };
+    });
+
     networking.useDHCP = mkOption {
       type = types.bool;
       default = true;
