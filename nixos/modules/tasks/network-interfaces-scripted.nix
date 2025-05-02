@@ -740,7 +740,7 @@ let
               path = [ pkgs.iproute2 ];
               script = ''
                 # Remove Dead Interfaces
-                ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
+                ip link show dev "${n}" >/dev/null 2>&1 && ip link set down "${n}" && ip link delete dev "${n}"
 
                 ${if v.virtual then ''
                   ip link add dev "${n}" type vcan
