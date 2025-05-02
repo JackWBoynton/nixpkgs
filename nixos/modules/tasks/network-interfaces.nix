@@ -1584,6 +1584,7 @@ in
         description = "Sample-point fraction for data phase.";
       };
     });
+    };
 
     networking.useDHCP = mkOption {
       type = types.bool;
