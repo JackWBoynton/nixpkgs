@@ -745,7 +745,7 @@ let
                 ${if v.virtual then ''
                   ip link add dev "${n}" type vcan
                 '' else ''
-                  ip link set "${n}" type can bitrate ${v.bitrate} \
+                  ip link set "${n}" type can bitrate "${v.bitrate}" \
                   ${optionalString v.fd ''
                     fd on dbitrate ${v.dataBitrate} \
                   ''}
