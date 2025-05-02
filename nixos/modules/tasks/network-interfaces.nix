@@ -418,7 +418,8 @@ let
         can = mkOption {
           type = types.nullOr (types.submodule {
             options.bitrate = mkOption {
-              type        = types.int;
+              type        = types.nullOr types.int;
+              default     = null;
               description = "Nominal CAN bitrate (bits/sec).";
             };
             options.fd = mkOption {
@@ -437,15 +438,18 @@ let
               description = "Enable triple‐sampling.";
             };
             options.restartMs = mkOption {
-              type        = types.int;
+              type        = types.nullOr types.int;
+              default     = null;
               description = "Automatic restart delay (ms).";
             };
             options.samplePoint = mkOption {
-              type        = types.float;
+              type        = types.nullOr types.float;
+              default     = null;
               description = "Sample point (fraction) for nominal phase.";
             };
             options.dataSamplePoint = mkOption {
-              type        = types.float;
+              type        = types.nullOr types.float;
+              default     = null;
               description = "Sample point (fraction) for data phase.";
             };
           });
